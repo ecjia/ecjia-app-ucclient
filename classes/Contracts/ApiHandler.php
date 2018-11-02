@@ -44,22 +44,22 @@
 //
 //  ---------------------------------------------------------------------------------
 //
+namespace Ecjia\App\Ucclient\Contracts;
 
-use Ecjia\App\Ucclient\Client\ApiBase;
-use Ecjia\App\Ucclient\Contracts\ApiHandler;
 use Royalcms\Component\Http\Request;
 
-class client_updateapps_module extends ApiBase implements ApiHandler
+/**
+ * API接口类
+ * @author royalwang
+ */
+interface ApiHandler
 {
-
-    public function handleRequest(Request $request)
-    {
-        if (! self::API_UPDATEAPPS) {
-            return self::API_RETURN_FORBIDDEN;
-        }
-        
-        return self::API_RETURN_SUCCEED;
-    }
+    /**
+     * API接口响应方法
+     * @param \Royalcms\Component\HttpKernel\Request $request
+     */
+    public function handleRequest(Request $request);
+    
 }
 
 // end

@@ -45,8 +45,8 @@
 //  ---------------------------------------------------------------------------------
 //
 
-use Ecjia\App\Ucenter\Client\ApiBase;
-use Ecjia\App\Ucenter\Contracts\ApiHandler;
+use Ecjia\App\Ucclient\Client\ApiBase;
+use Ecjia\App\Ucclient\Contracts\ApiHandler;
 use Royalcms\Component\Http\Request;
 
 class client_updateclient_module extends ApiBase implements ApiHandler
