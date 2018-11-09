@@ -6,6 +6,7 @@ use Royalcms\Component\Ucenter\Client\Traits\FunctionTrait;
 use Royalcms\Component\Ucenter\Client\Traits\CompatibleTrait;
 use Royalcms\Component\Ucenter\Utilities\Serialize;
 use Royalcms\Component\Support\Traits\Macroable;
+use RC_Error;
 
 class Ucenter
 {
@@ -13,7 +14,7 @@ class Ucenter
     use CompatibleTrait;
     use Macroable;
     
-    protected $service;
+    protected $requestHandler;
     
     protected $config;
 
@@ -21,7 +22,7 @@ class Ucenter
     {
         $this->config = new UcenterConfig();
 
-        $this->service = new UcenterRequest($this->config);
+        $this->requestHandler = new UcenterRequest($this->config);
     }
 
     /**
@@ -32,6 +33,19 @@ class Ucenter
     public function getUcenterConfig()
     {
         return $this->config;
+    }
+
+    public function getRequestHandler()
+    {
+        return $this->requestHandler;
+    }
+
+    public function send($module, $action, $arg = array(), $extra = null)
+    {
+        $return = $this->requestHandler->send($module, $action, $arg, $extra);
+
+        $data = Serialize::unserialize($return);
+        return is_array($data) ? json_encode($data) : $return;
     }
     
     /**
@@ -46,7 +60,7 @@ class Ucenter
      */
     public function ucUserRegister($username, $password, $email, $questionid = '', $answer = '', $regip = '')
     {
-        return $this->service->send('user', 'register',
+        return $this->requestHandler->send('user', 'register',
             array(
                 'username' => $username,
                 'password' => $password,
@@ -72,7 +86,7 @@ class Ucenter
     public function ucUserLogin($username, $password, $isuid = 0, $checkques = 0, $questionid = '', $answer = '')
     {
         $isuid = intval($isuid);
-        $return = $this->service->send('user', 'login',
+        $return = $this->requestHandler->send('user', 'login',
             array(
                 'username' => $username,
                 'password' => $password,
@@ -99,7 +113,7 @@ class Ucenter
     public function ucUserSynlogin($uid)
     {
         $uid = intval($uid);
-        return $this->service->send('user', 'synlogin', array('uid' => $uid));
+        return $this->requestHandler->send('user', 'synlogin', array('uid' => $uid));
     }
     
     /**
@@ -109,7 +123,7 @@ class Ucenter
      */
     public function ucUserSynlogout()
     {
-        return $this->service->send('user', 'synlogout', array());
+        return $this->requestHandler->send('user', 'synlogout', array());
     }
     
     /**
@@ -125,7 +139,7 @@ class Ucenter
      */
     public function ucUserEdit($username, $oldpw, $newpw, $email, $ignoreoldpw = 0, $questionid = '', $answer = '')
     {
-        return $this->service->send('user', 'edit',
+        return $this->requestHandler->send('user', 'edit',
             array(
                 'username' => $username,
                 'oldpw' => $oldpw,
@@ -145,7 +159,7 @@ class Ucenter
      */
     public function ucUserDelete($uid)
     {
-        return $this->service->send('user', 'delete', array('uid' => $uid));
+        return $this->requestHandler->send('user', 'delete', array('uid' => $uid));
     }
     
     /**
@@ -155,7 +169,7 @@ class Ucenter
      */
     public function ucUserDeleteAvatar($uid)
     {
-        return $this->service->send('user', 'deleteavatar', array('uid' => $uid));
+        return $this->requestHandler->send('user', 'deleteavatar', array('uid' => $uid));
     }
     
     /**
@@ -165,7 +179,7 @@ class Ucenter
      */
     public function ucUserCheckName($username)
     {
-        return $this->service->send('user', 'check_username', array('username' => $username));
+        return $this->requestHandler->send('user', 'check_username', array('username' => $username));
     }
     
     /**
@@ -175,7 +189,7 @@ class Ucenter
      */
     public function ucUserCheckEmail($email)
     {
-        return $this->service->send('user', 'check_email', array('email' => $email));
+        return $this->requestHandler->send('user', 'check_email', array('email' => $email));
     }
 
     /**
@@ -187,7 +201,7 @@ class Ucenter
      */
     public function ucGetUser($username, $isuid = 0)
     {
-        $return = $this->service->send('user', 'get_user',
+        $return = $this->requestHandler->send('user', 'get_user',
             array(
                 'username' => $username,
                 'isuid' => $isuid
@@ -208,7 +222,7 @@ class Ucenter
      */
     public function ucUserMerge($oldusername, $newusername, $uid, $password, $email)
     {
-        return $this->service->send('user', 'merge',
+        return $this->requestHandler->send('user', 'merge',
             array(
                 'oldusername' => $oldusername,
                 'newusername' => $newusername,
@@ -226,7 +240,7 @@ class Ucenter
      */
     public function ucUserMergeRemove($username)
     {
-        return $this->service->send('user', 'merge_remove', array('username' => $username));
+        return $this->requestHandler->send('user', 'merge_remove', array('username' => $username));
     }
 
     /**
@@ -248,7 +262,7 @@ class Ucenter
         $query = http_build_query($query);
         $url = UC_API . "/avatar.php?" . $query;
         $response = \RC_Http::remote_get($url);
-        if (is_ecjia_error($response)) {
+        if (RC_Error::is_error($response)) {
             return $response;
         }
         
@@ -266,7 +280,7 @@ class Ucenter
      */
     public function ucCheckVersion()
     {
-        $return = $this->service->send('version', 'check', array());
+        $return = $this->requestHandler->send('version', 'check', array());
         $data = Serialize::unserialize($return);
         return is_array($data) ? $data : $return;
     }

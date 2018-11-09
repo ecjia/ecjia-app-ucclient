@@ -10,6 +10,7 @@ namespace Royalcms\Component\Ucenter\Client;
 
 use Royalcms\Component\Ucenter\Client\Ucenter;
 use RC_Http;
+use RC_Error;
 
 class UcenterRequest
 {
@@ -62,7 +63,7 @@ class UcenterRequest
      * @param array $arg
      * @return array|\RC_Error
      */
-    public function send($module, $action, $arg = array())
+    public function send($module, $action, $arg = array(), $extra = null)
     {
         $this->module = $module;
         $this->action = $action;
@@ -70,20 +71,22 @@ class UcenterRequest
 
         $this->parameterBuild();
 
-        $body = $this->apiRequestData();
+        $body = $this->apiRequestData($extra);
 
         $postdata = [
             'user-agent' => $this->user_agent,
             'body' => $body
         ];
 
-        $response = RC_Http::remote_post($this->apiUrl(), $postdata);
+        $response = RC_Http::remote_post($this->apiUrl($extra), $postdata);
 
-        if (is_ecjia_error($response)) {
+        if (RC_Error::is_error($response)) {
             return $response;
         }
  
-        return $response['body'];
+        $data = RC_Http::remote_retrieve_body($response);
+
+        return $data;
     }
 
     /**

@@ -11,8 +11,6 @@ class UcenterConfig
     public function __construct()
     {
         $this->config = config('ucenter::ucenter');
-        
-
     }
 
     /**
@@ -44,7 +42,7 @@ class UcenterConfig
      */
     public function UC_API()
     {
-        return $this->config['api'];
+        return rtrim($this->config['api'], '/');
     }
 
     /**
@@ -78,6 +76,56 @@ class UcenterConfig
     {
         return $this->config['ppp'];
     }
+
+    public function setUcConnect($connect)
+    {
+        $this->config['connect'] = $connect;
+
+        return $this;
+    }
+
+    public function setUcKey($key)
+    {
+        $this->config['key'] = $key;
+
+        return $this;
+    }
+
+    public function setUcUrl($url)
+    {
+        $this->config['url'] = $url;
+
+        return $this;
+    }
+
+    public function setUcApi($api)
+    {
+        $this->config['api'] = $api;
+
+        return $this;
+    }
+
+    public function setUcCharset($charset)
+    {
+        $this->config['charset'] = $charset;
+
+        return $this;
+    }
+
+    public function setUcIp($ip)
+    {
+        $this->config['ip'] = $ip;
+
+        return $this;
+    }
+
+    public function setUcAppid($appid)
+    {
+        $this->config['appid'] = $appid;
+
+        return $this;
+    }
+
 }
 
 // end
