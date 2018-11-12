@@ -2,9 +2,7 @@
 
 namespace Ecjia\App\Ucclient\Client;
 
-use ecjia_api;
-
-class ApiBase extends ecjia_api
+class ApiBase
 {
 
     //启用接口
@@ -34,8 +32,7 @@ class ApiBase extends ecjia_api
 
     public function __construct()
     {
-        parent::__construct();
-        
+
     }
     
     

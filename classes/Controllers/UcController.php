@@ -5,12 +5,13 @@ namespace Ecjia\App\Ucclient\Controllers;
 use ecjia_front;
 use Ecjia\App\Ucclient\Client\ApiRouter;
 use Ecjia\App\Ucclient\Client\ApiBase;
+use Royalcms\Component\Routing\Controller as RoyalcmsController;
 
-class UcController extends ecjia_front
+class UcController extends RoyalcmsController
 {
     public function __construct()
     {
-        parent::__construct();
+        
     }
 
     
@@ -53,14 +54,5 @@ class UcController extends ecjia_front
         }
     }
     
-    
-    
-    public function test()
-    {
-        $b = with(new \Ecjia\App\Ucenter\Repositories\ApplicationRepository)->getApp(1);
-        dd($b);
-        
-//         $a = RC_Ucenter::ucUserCheckName('test007');
-//         _dump($a,1);
-    }
+
 }

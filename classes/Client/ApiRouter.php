@@ -63,7 +63,7 @@ class ApiRouter
     {
         
         if (empty($apis)) {
-            self::$apiRoutes = config('ucapi');
+            self::$apiRoutes = config('clientapi');
         }
         else {
             self::$apiRoutes = $apis;
