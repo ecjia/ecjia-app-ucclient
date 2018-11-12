@@ -73,13 +73,22 @@ class ApiManager
 
     public function handler()
     {
-        $module = $this->request->input('module');
-        $action = $this->request->input('action');
-        if (empty($module) && empty($action)) {
-            return new ecjia_error('url_param_not_exists', 'NO ACCESS');
+        $code = $this->request->input('code');
+        $uc_key = (new UcClient())->getUcKey();
+        $authData = ApiBase::authcode($code, 'DECODE', $uc_key);
+
+        $gets = array();
+        parse_str($authData, $gets);
+
+        if (SYS_TIME - $gets['time'] > 3600) {
+            return new ecjia_error('authracation_expiried', 'Authracation has expiried');
         }
 
-        $url = $module . '/' . $action;
+        if (empty($get)) {
+            return new ecjia_error('invalid_request', 'Invalid Request');
+        }
+
+        $url = $get['action'];
         if (empty($url)) {
             return new ecjia_error('url_param_not_exists', 'NO ACCESS');
         }
