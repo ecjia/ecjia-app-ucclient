@@ -2,7 +2,6 @@
 
 namespace Ecjia\App\Ucclient\Controllers;
 
-use ecjia_front;
 use Ecjia\App\Ucclient\Client\ApiRouter;
 use Ecjia\App\Ucclient\Client\ApiBase;
 use Royalcms\Component\Routing\Controller as RoyalcmsController;
@@ -11,7 +10,7 @@ class UcController extends RoyalcmsController
 {
     public function __construct()
     {
-        
+
     }
 
     
