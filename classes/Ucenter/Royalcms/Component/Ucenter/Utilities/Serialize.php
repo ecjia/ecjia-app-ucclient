@@ -24,7 +24,7 @@ class Serialize
 
 
     public static function xml_unserialize(& $xml, $isnormal = FALSE) {
-        $xml_parser = new XML($isnormal);
+        $xml_parser = new Xml($isnormal);
         $data = $xml_parser->parse($xml);
         $xml_parser->__destruct();
         return $data;
